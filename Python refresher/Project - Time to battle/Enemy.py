@@ -1,4 +1,5 @@
 class Enemy:
+
     '''
         - Special attacks
         - Have them battle!
@@ -26,3 +27,4 @@ class Enemy:
 
     def last_words(self):
         print('ARRRGHH')
+
