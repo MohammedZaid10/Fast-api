@@ -1,0 +1,10 @@
+Fast-API
+========
+
+Command to create new venv : python -m venv fastapienv
+
+to activate : .\fastapienv\Scripts\Activate.ps1
+
+python -m pip install setuptools wheel
+pip install fastapi
+pip install "uvicorn[standard]"
