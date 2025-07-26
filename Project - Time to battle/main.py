@@ -5,8 +5,17 @@ from Ogre import *
 # print(big_zombie.health_points)
 # print(big_zombie.attack())
 
+
+def battle(e: Enemy):
+    e.talk()
+    e.attack()
+
+
 zombie = Zombie(10, 1)
 ogre = Ogre(20, 3)
 
-zombie.spread_disease()
-ogre.talk()
+# zombie.spread_disease()
+# ogre.talk()
+
+battle(zombie)
+battle(ogre)
