@@ -8,3 +8,5 @@ zombie = Enemy("Zombie", 10, 1)
 # print(big_zombie.attack())
 
 print(zombie.get_type_of_enemy())
+
+
