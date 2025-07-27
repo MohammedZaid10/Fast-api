@@ -8,3 +8,33 @@ install these : python -m pip install setuptools wheel
 install fastapi : pip install fastapi or pip install "fastapi[standard]"
 install uvicorn : pip install "uvicorn[standard]"
 to run fastapi app : uvicorn books:app --reload or fastapi dev Books.py or fastapi run Books.py
+
+======================================================================
+
+Lesson 69 - FastAPI Project - Enhance Get Request
+
+Go to this path to open Swaager UI, to test all API endpoints : http://127.0.0.1:8000/docs
+
+Books.py:
+
+from fastapi import FastAPI
+
+app = FastAPI()
+
+BOOKS = [
+    {'title': 'Title One', 'author': 'Author One', 'category': 'Science'},
+    {'title': 'Title Tow', 'author': 'Author Two', 'category': 'Science'},
+    {'title': 'Title Three', 'author': 'Author Three', 'category': 'History'},
+    {'title': 'Title Four', 'author': 'Author Four', 'category': 'Math'},
+    {'title': 'Title Five', 'author': 'Author Five', 'category': 'Math'},
+    {'title': 'Title Six', 'author': 'Author Two', 'category': 'Math'}
+]
+
+
+@app.get("/books")
+async def read_all_books():
+    return BOOKS
+
+======================================================================
+
+
