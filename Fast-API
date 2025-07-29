@@ -12,9 +12,9 @@ to run fastapi app : uvicorn books:app --reload or fastapi dev Books.py or fasta
 ======================================================================
 
 CRUD IN Fast-API:
-  1. PUT request is Create
-  2. GET request is Read
-  3. PUT request is Update
+  1. POST request is CREATE
+  2. GET request is READ
+  3. PUT request is UPDATE
   4. DELETE request is DELETE
 
 ======================================================================
@@ -136,3 +136,135 @@ async def read_books_by_author_and_category(book_author: str, book_category: str
     return books_to_return
 
 ======================================================================
+
+Lesson 74 : FastAPI Project: Post Request Overview &
+Lesson 75 : FastAPI Project: Post Request 
+
+You wont see the data in create_book url : 
+@app.post("/books/create_book")
+async def create_book(new_book=Body()):
+    BOOKS.append(new_book)
+    return new_book
+
+curl -X 'POST' 'http://127.0.0.1:8000/books/create_book' -H 'accept: application/json' -H 'Content-Type: application/json' -d '{"title": "Title Seven", "author": "Author Two", "category": "Science"}'
+
+
+======================================================================
+
+Lesson 76 : FastAPI Project: Put Request Overview &
+Lesson 77 : FastAPI Project: Post Request
+
+@app.put("/books/update_book/{book_update}/")
+async def update_book(book_update: str, updated_book_data=Body()):
+    for i in range(len(BOOKS)):
+        if BOOKS[i].get("title").casefold() == book_update.casefold():
+            BOOKS[i] = updated_book_data
+
+
+from fastapi import Body, FastAPI
+
+app = FastAPI()
+
+BOOKS = [
+    {"title": "Title One", "author": "Author One", "category": "Science"},
+    {"title": "Title Two", "author": "Author Two", "category": "Science"},
+    {"title": "Title Three", "author": "Author Three", "category": "History"},
+    {"title": "Title Four", "author": "Author Four", "category": "Math"},
+    {"title": "Title Five", "author": "Author Five", "category": "Math"},
+    {"title": "Title Six", "author": "Author Two", "category": "Math"}
+]
+
+======================================================================
+
+Lesson 78 : FastAPI Project: Delete Request Overview
+Lesson 79 : FastAPI Project: Delete Request
+
+@app.delete("/books/delete_books/{book_title}")
+async def delete_books(book_title: str):
+    for i in range(len(BOOKS)):
+        if BOOKS[i].get("title").casefold() == book_title.casefold():
+            BOOKS.pop(i)
+            break
+
+======================================================================
+
+Lesson 80 & 81 : PROJECT 1 : Assignment
+
+
+# --- REORDERED ENDPOINTS (GETs first, from Most Specific to Least Specific) ---
+
+# 1. Most specific path with multiple dynamic segments (e.g., /books/AUTHOR_NAME/CATEGORY_NAME/)
+# This captures URLs like /books/AuthorOne/Science/
+@app.get("/books/{book_author}/{book_category}/")
+async def read_books_by_author_and_category(book_author: str, book_category: str):
+    books_to_return = []
+    for book in BOOKS:
+        if book.get("author").casefold() == book_author.casefold() and \
+                book.get("category").casefold() == book_category.casefold():
+            books_to_return.append(book)
+    return books_to_return
+
+
+# 2. Paths with a static segment followed by a dynamic parameter (e.g., /books/author/NAME)
+# This captures URLs like /books/author/AuthorOne
+@app.get("/books/author/{book_author}")
+async def fetch_books(book_author: str):
+    books_to_return = []
+    for book in BOOKS:
+        if book.get("author").casefold() == book_author.casefold():
+            books_to_return.append(book)
+    return books_to_return
+
+
+# 3. General path with a single dynamic parameter (e.g., /books/ANY_STRING)
+# This captures URLs like /books/TitleOne. It must come after more specific dynamic paths.
+@app.get("/books/{book_title}")
+async def read_book(book_title: str):
+    for book in BOOKS:
+        if book.get("title").casefold() == book_title.casefold():
+            return book
+
+
+# 4. Root collection path with query parameters (e.g., /books/?category=Science)
+# This uses a query parameter, so its order relative to path parameters is less critical,
+# but it's fine here after the more specific path parameter routes.
+@app.get("/books/")
+async def read_category_by_books(category: str):
+    books_to_return = []
+    for book in BOOKS:
+        if book.get("category").casefold() == category.casefold():
+            books_to_return.append(book)
+    return books_to_return
+
+
+# 5. General collection path (no parameters, e.g., /books)
+@app.get("/books")
+async def read_all_books():
+    return BOOKS
+
+
+# --- POST (Create) Operations ---
+@app.post("/books/create_book")
+async def create_book(new_book=Body()):
+    BOOKS.append(new_book)
+    return new_book
+
+
+# --- PUT (Update) Operations ---
+# This uses a path parameter, so it's fine after the GETs.
+@app.put("/books/update_book/{book_update}/")
+async def update_book(book_update: str, updated_book_data=Body()):
+    for i in range(len(BOOKS)):
+        if BOOKS[i].get("title").casefold() == book_update.casefold():
+            BOOKS[i] = updated_book_data
+            break # Stop after finding and updating the first matching book
+
+
+# --- DELETE Operations ---
+# This uses a path parameter, so it's fine after the GETs.
+@app.delete("/books/delete_books/{book_title}")
+async def delete_books(book_title: str):
+    for i in range(len(BOOKS)):
+        if BOOKS[i].get("title").casefold() == book_title.casefold():
+            BOOKS.pop(i)
+            break
