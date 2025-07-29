@@ -11,17 +11,28 @@ to run fastapi app : uvicorn books:app --reload or fastapi dev Books.py or fasta
 
 ======================================================================
 
-CRUD IN Fast-API:
-  1. POST request is CREATE
-  2. GET request is READ
-  3. PUT request is UPDATE
-  4. DELETE request is DELETE
+TOPICS In Project 1:
+
+1. CRUD IN Fast-API:
+  a. POST request is CREATE
+  b. GET request is READ
+  c. PUT request is UPDATE
+  d. DELETE request is DELETE
+2. Order of execution
+3. Dynamic Paramters :
+  a. Path Paramters
+  b. Query Parameters
+
+======================================================================
+
+Questions to practise from Project 1:
+  Create a new API Endpoint that can fetch all books from a specific author using either Path Parameters or Query Parameters.
 
 ======================================================================
 
 Lesson 69 - FastAPI Project - Enhance Get Request
 
-Go to this path to open Swaager UI, to test all API endpoints : http://127.0.0.1:8000/docs
+Go to this path to open Swagger UI, to test all API endpoints : http://127.0.0.1:8000/docs
 
 Books.py:
 
@@ -190,6 +201,15 @@ async def delete_books(book_title: str):
 
 Lesson 80 & 81 : PROJECT 1 : Assignment
 
+@app.get("/books/author/{book_author}")
+async def fetch_books(book_author: str):
+    books_to_return = []
+    for Book in BOOKS:
+        if Book.get("author").casefold() == book_author.casefold():
+            books_to_return.append(Book.get("title"))
+    return books_to_return
+
+======================================================================
 
 # --- REORDERED ENDPOINTS (GETs first, from Most Specific to Least Specific) ---
 
@@ -268,3 +288,5 @@ async def delete_books(book_title: str):
         if BOOKS[i].get("title").casefold() == book_title.casefold():
             BOOKS.pop(i)
             break
+
+======================================================================
