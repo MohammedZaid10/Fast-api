@@ -89,20 +89,20 @@ BOOKS = [
 ]
 
 
+// Always make sure that an API with a static parameter comes before a dynamic parameter
+// @app.get("/books/mybook")
+// async def read_all_books():
+//     return {'book title': 'My favourite book'}
+
+
+// @app.get("/books/{dynamic_param}")
+// async def read_all_books(dynamic_param: str):
+//     return {'dynamic_param': dynamic_param}
+
+
 @app.get("/books")
 async def read_all_books():
     return BOOKS
-
-# Always make sure that an API with a static parameter comes before a dynamic parameter
-# @app.get("/books/mybook")
-# async def read_all_books():
-#     return {'book title': 'My favourite book'}
-
-
-# @app.get("/books/{dynamic_param}")
-# async def read_all_books(dynamic_param: str):
-#     return {'dynamic_param': dynamic_param}
-
 
 @app.get("/books/{book_title}")
 async def read_book(book_title: str):
@@ -112,3 +112,27 @@ async def read_book(book_title: str):
 
 ======================================================================
 
+Lesson 72 : FastAPI Project: Query Parameters Overview &
+Lesson 73 : FastAPI Project: Query Parameters
+
+Query paramters are used when we want to filter the result based on some data:
+
+@app.get("/books/")
+async def read_category_by_books(category: str):
+    books_to_return = []
+    for book in BOOKS:
+        if book.get('category').casefold() == category.casefold():
+            books_to_return.append(book)
+    return books_to_return
+
+Using Path parameters using Query Parameters:
+@app.get("/books/{book_author}/")
+async def read_books_by_author_and_category(book_author: str, book_category: str):
+    books_to_return = []
+    for book in BOOKS:
+        if book.get('author').casefold() == book_author.casefold() and \
+                book.get('category').casefold() == book_category.casefold():
+            books_to_return.append(book)
+    return books_to_return
+
+======================================================================
