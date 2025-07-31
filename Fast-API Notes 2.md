@@ -16,3 +16,23 @@ Optional variables need a =None example: id: Optional[int] = None
 
 ======================================================================
 
+Lesson 86 : FastAPI Project: Pydantics and Data Validation Overview
+
+Syntax for Pydantic data validation which is done by calling "BaseModel" in our constructor class which is the pydantic model:
+
+class BookRequest(BaseModel):
+    id: int
+    title: str = Field(min_length=3)
+    author: str = Field(min_length=1)
+    description: str = Field(min_length=1, max_length=100)
+    rating: int = Field(gt=0, lt=5)
+
+    @app.post("/create-book")
+    async def create_book(book_request: BookRequest):
+        new_book = Book(**book_request.dict())
+        BOOKS.append(new_book)
+
+** operator will pass the key/value from BookRequest() into the Book() constructor
+
+======================================================================
+
