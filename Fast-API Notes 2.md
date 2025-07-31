@@ -36,3 +36,21 @@ class BookRequest(BaseModel):
 
 ======================================================================
 
+Lesson 87 : FastAPI Project: Pydantic Book request Validation
+
+class BookRequest(BaseModel):
+    id: int
+    title: str
+    author: str
+    description: str
+    rating: int
+
+@app.post("/create-book")
+async def create_book(book_request: BookRequest):
+    new_book = Book(**book_request.dict())
+    print(type(new_book))
+    BOOKS.append(book_request)
+
+======================================================================
+
+Lesson 88 : FastAPI Project: Fields - Data Validation
